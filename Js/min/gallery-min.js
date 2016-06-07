@@ -39,15 +39,15 @@ var $nextButtonHtml = '<button id="next-slide" class="carousel-control right-con
 
 
 //Transitions
-var singleTransition = 200;
-var doubleTransition = 400;
+var $singleTransition = 200;
+var $doubleTransition = 400;
 
 /* --------------------------------------------------------------------------- *\
     FUNCTONS
 \* --------------------------------------------------------------------------- */
 //Focus and mouseover fx
 /*function addFocusFx() {
-    $hoverTile = '<div class="js-alt-active"><p>' + $(this).find('img').attr('alt') + '</p></div>';
+    $hoverTile = '<p class="js-alt-active">' + $(this).find('img').attr('alt') + '</p>';
     $(this).prepend($hoverTile);
 }*/
 
@@ -104,7 +104,7 @@ function loadCarouselSlide() {
 
 //Animate slide
 function animateSlide() {
-    $($currentSlide).fadeOut(singleTransition).fadeIn(singleTransition);
+    $($currentSlide).fadeOut($singleTransition).fadeIn($singleTransition);
 }
 
 //Get new data en load slide
@@ -112,13 +112,13 @@ function getNewSlide(selectItem) {
     highlightSelected(selectItem);
     getSlideData(selectItem);
     animateSlide();
-    setTimeout(loadCarouselSlide, singleTransition);
+    setTimeout(loadCarouselSlide, $singleTransition);
 }
 
 //Hiding the overlay
 function hideOverlay() {
-    $($overlay).fadeOut(doubleTransition);
-    setTimeout(removeOverlay, doubleTransition);
+    $($overlay).fadeOut($doubleTransition);
+    setTimeout(removeOverlay, $doubleTransition);
     $(document).off('keydown');
 }
 
@@ -165,7 +165,7 @@ function showOverlay(selectItem) {
     highlightSelected(selectItem);
     getSlideData(selectItem);
     loadCarouselSlide();
-    $($overlay).fadeIn(doubleTransition);
+    $($overlay).fadeIn($doubleTransition);
     carouselControl();
 }
 
@@ -188,10 +188,10 @@ $($input).keyup(function() {
         //Check if the image name contains the input value
         if ($imageName.toLowerCase().indexOf($inputValue.toLowerCase()) < 0) {
             //Hide mismatches
-            $(this).parent().parent().fadeOut(doubleTransition);
+            $(this).parent().parent().fadeOut($doubleTransition);
         } else {
             //Show matches
-            $(this).parent().parent().fadeIn(doubleTransition);
+            $(this).parent().parent().fadeIn($doubleTransition);
         }
 
     });
@@ -216,7 +216,6 @@ $($galleryItem).click(function(event) {
 
 //Add alt text to hover + remove again after
 $($galleryItem).mouseover(function() {
-    // addFocusFx();
     $hoverTile = '<p class="js-alt-active">' + $(this).find('img').attr('alt') + '</p>';
     $(this).prepend($hoverTile);
 });
@@ -224,7 +223,6 @@ $($galleryItem).mouseout(function() {
     removeFocusFx();
 });
 $($galleryItem + ' a').focus(function() {
-    // addFocusFx();
     $hoverTile = '<p class="js-alt-active">' + $(this).find('img').attr('alt') + '</p>';
     $(this).prepend($hoverTile);
 });
