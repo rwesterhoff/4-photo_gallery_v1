@@ -1,0 +1,254 @@
+/* // Typography
+$font-primary: 'Merriweather', serif; */
+/* 
+// Transition
+$transition-duration: .3s;
+
+// Validation
+$color-invalid: #FEDFE0; */
+/*----------------------------------------------------------------------------------------------------------------------- *\
+    BASE
+\*----------------------------------------------------------------------------------------------------------------------- */
+/* Reset */
+* {
+  box-sizing: border-box; }
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  min-height: 100%;
+  font-family: 'Roboto Mono', sans-serif; }
+
+ul {
+  padding: 0;
+  margin: 0; }
+
+figure {
+  margin: 0;
+  padding: 0; }
+
+figcaption {
+  color: #FFF; }
+
+/*----------------------------------------------------------------------------------------------------------------------- *\
+    MODULES
+\*----------------------------------------------------------------------------------------------------------------------- */
+/* Header */
+header.page-header {
+  z-index: 500;
+  height: 100px;
+  padding: 28px;
+  text-align: center;
+  background-color: #FFF; }
+
+input[type='search'] {
+  font-size: 14px;
+  width: 100%;
+  height: 44px;
+  padding: 0 10px;
+  border: 2px solid #D0D0D0;
+  border-radius: 4px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none; }
+  input[type='search']:focus {
+    border-color: black;
+    outline: none; }
+
+/* Image gallery */
+li.gallery-item {
+  position: relative;
+  float: left;
+  overflow: hidden;
+  width: calc(50% - 30px);
+  margin: 15px;
+  list-style: none;
+  /*     &.selected {
+          a {
+              border: 10px solid black;
+          }
+      } */ }
+  li.gallery-item a:focus img, li.gallery-item:hover img {
+    -webkit-transform: scale(1.1);
+            transform: scale(1.1);
+    -webkit-filter: blur(10px);
+            filter: blur(10px); }
+  li.gallery-item a {
+    display: block; }
+    li.gallery-item a:focus, li.gallery-item a:hover {
+      outline: none; }
+    li.gallery-item a img {
+      display: block;
+      width: 100%; }
+  li.gallery-item.prev a {
+    border: 10px solid green; }
+  li.gallery-item.next a {
+    border: 10px solid red; }
+
+/* Image overlay */
+#js-image-overlay {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  display: none;
+  display: table;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  background-color: rgba(46, 46, 46, 0.95); }
+  #js-image-overlay .close-overlay {
+    position: absolute;
+    z-index: 1600;
+    top: 20px;
+    right: 20px;
+    display: block;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    cursor: pointer;
+    text-indent: -10000px;
+    border: 0;
+    background: url("../Assets/close-x.svg") center no-repeat;
+    background-color: transparent;
+    background-size: 40px 40px;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none; }
+    #js-image-overlay .close-overlay:focus, #js-image-overlay .close-overlay:hover {
+      outline: 0; }
+
+/* Carousel */
+.carousel {
+  position: relative;
+  display: table-cell;
+  width: 100%;
+  vertical-align: middle; }
+  .carousel-slides {
+    position: relative;
+    z-index: 1250;
+    width: 100%;
+    margin: 0 auto; }
+  .carousel-slide {
+    display: block; }
+    .carousel-slide img,
+    .carousel-slide iframe {
+      display: block;
+      width: 100%;
+      max-width: 100%; }
+    .carousel-slide figcaption {
+      display: none; }
+  .carousel-control {
+    position: absolute;
+    z-index: 1500;
+    top: 0;
+    display: block;
+    width: 12.5%;
+    height: 100%;
+    padding: 0;
+    cursor: pointer;
+    -webkit-transition: background .2s;
+    transition: background .2s;
+    border: 0;
+    background-color: transparent;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none; }
+    .carousel-control.left-control {
+      left: 0;
+      text-indent: -10000px;
+      background: url("../Assets/arrow-prev.svg") center no-repeat;
+      background-size: 40px 40px; }
+      .carousel-control.left-control:focus, .carousel-control.left-control:hover {
+        outline: 0;
+        background: url("../Assets/arrow-prev.svg") 25% center no-repeat;
+        background-size: 40px 40px; }
+    .carousel-control.right-control {
+      right: 0;
+      text-indent: 10000px;
+      background: url("../Assets/arrow-next.svg") center no-repeat;
+      background-size: 40px 40px; }
+      .carousel-control.right-control:focus, .carousel-control.right-control:hover {
+        outline: 0;
+        background: url("../Assets/arrow-next.svg") 75% center no-repeat;
+        background-size: 40px 40px; }
+
+/* Getting the video to display correctly */
+.videoWrapper {
+  position: relative;
+  height: 0;
+  /* 16:9 */
+  padding-top: 25px;
+  padding-bottom: 56.25%; }
+
+.videoWrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; }
+
+/*----------------------------------------------------------------------------------------------------------------------- *\
+    LAYOUT
+\*----------------------------------------------------------------------------------------------------------------------- */
+/* Mobile devices and up*/
+main.container {
+  padding: 0 15px 15px 15px; }
+
+/* Medium devices little larger devices and up*/
+@media screen and (min-width: 568px) and (max-width: 1024px) {
+  #image-gallery li.gallery-item {
+    width: calc(33.3333% - 30px); } }
+/* Medium sized devices and up*/
+@media screen and (min-width: 768px) {
+  input[type='search'] {
+    width: 460px; } }
+/* Larger devices and up */
+@media screen and (min-width: 1024px) {
+  main.container {
+    width: 1040px;
+    margin: 0 auto;
+    padding: 30px 0; }
+
+  #image-gallery li.gallery-item {
+    width: 200px;
+    height: 200px;
+    margin: 0 30px 60px 30px; }
+
+  .carousel-slide {
+    z-index: 1750;
+    display: block;
+    width: 78.125%;
+    margin: 20px auto 0;
+    color: white; }
+    .carousel-slide figcaption {
+      display: block;
+      max-width: 600px;
+      margin: 20px auto 0; }
+  .carousel-control {
+    width: 10.9375%; }
+    .carousel-control.left-control {
+      background: url("../Assets/arrow-prev.svg") center no-repeat;
+      background-size: 40px 40px; }
+    .carousel-control.right-control {
+      background: url("../Assets/arrow-next.svg") center no-repeat;
+      background-size: 40px 40px; } }
+/*----------------------------------------------------------------------------------------------------------------------- *\
+ STATES
+\*----------------------------------------------------------------------------------------------------------------------- */
+/* Centerring the hover + focus text */
+.js-alt-active {
+  position: absolute;
+  z-index: 1000;
+  top: 50%;
+  left: 50%;
+  display: block;
+  margin-right: -50%;
+  -webkit-transform: translate(-50%, -100%);
+          transform: translate(-50%, -100%);
+  color: white; }
