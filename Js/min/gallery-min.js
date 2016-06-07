@@ -26,6 +26,7 @@ var $slidesWrapper = "#js-carousel-slides";
 var $currentSlide = '.current-slide';
 
 //Injected HTML
+var $overlayHtml = '<div id="js-image-overlay"></div>';
 var $closeHtml = '<button id="js-close-overlay" class="close-overlay">Close overlay</button>';
 var $carouselHtml = '<div id="js-carousel" class="carousel"></div>';
 var $slidesWrapperHtml = '<div id="js-carousel-slides" class="carousel-slides">';
@@ -36,6 +37,10 @@ var $captionHtml = '<figcaption></figcaption>';
 var $prevButtonHtml = '<button id="previous-slide" class="carousel-control left-control">Previous</button>';
 var $nextButtonHtml = '<button id="next-slide" class="carousel-control right-control">Next</button>';
 
+
+//Transitions
+var singleTransition = 200;
+var doubleTransition = 400;
 
 /* --------------------------------------------------------------------------- *\
     FUNCTONS
@@ -52,24 +57,27 @@ function removeFocusFx() {
 
 //Higlight a new gallery item
 function highlightSelected(selectItem) {
-    // Define as selected item  
     selectItem.addClass($classSelected).siblings().removeClass($classSelected);
 }
 
 //Get overlay ready to show
 function injectOverlay() {
+    $('body').prepend($overlayHtml);
+    $($overlay).hide();
     $($overlay).append($closeHtml + $carouselHtml);
     $($carousel).append($slidesWrapperHtml);
     $($slidesWrapper).append($slideHtml + $prevButtonHtml + $nextButtonHtml);
+}
+
+//Remove it again
+function removeOverlay() {
+    $($overlay).remove();
 }
 
 //Get data from selected item (getting stuff)
 function getSlideData(selectItem) {
     $activeLink = selectItem.find('a').attr('href');
     $activeCaption = selectItem.find('img').attr('title');
-    // $activeLink = $($gallery).index($itemIndex).find('a').attr('href');
-    // $activeCaption = $($gallery).index($itemIndex).find('img').attr('title');
-
 }
 
 //Load data in slide (setting stuff)
@@ -80,6 +88,7 @@ function loadCarouselSlide() {
         //Append an iframe tag
         $($currentSlide).append($iframeHtml);
         $($currentSlide).append($captionHtml);
+        //And give new data
         $($currentSlide).find('iframe').attr('src', $activeLink);
         $($currentSlide).find('figcaption').text($activeCaption);
 
@@ -87,6 +96,7 @@ function loadCarouselSlide() {
         //Else append an img tag
         $($currentSlide).append($imageHtml);
         $($currentSlide).append($captionHtml);
+        //And give new data
         $($currentSlide).find('img').attr('src', $activeLink);
         $($currentSlide).find('figcaption').text($activeCaption);
     }
@@ -94,7 +104,7 @@ function loadCarouselSlide() {
 
 //Animate slide
 function animateSlide() {
-    $($currentSlide).fadeOut(250).fadeIn(250);
+    $($currentSlide).fadeOut(singleTransition).fadeIn(singleTransition);
 }
 
 //Get new data en load slide
@@ -102,7 +112,14 @@ function getNewSlide(selectItem) {
     highlightSelected(selectItem);
     getSlideData(selectItem);
     animateSlide();
-    setTimeout(loadCarouselSlide, 250);
+    setTimeout(loadCarouselSlide, singleTransition);
+}
+
+//Hiding the overlay
+function hideOverlay() {
+    $($overlay).fadeOut(doubleTransition);
+    setTimeout(removeOverlay, doubleTransition);
+    $(document).off('keydown');
 }
 
 //Control the entire thing
@@ -116,9 +133,7 @@ function carouselControl() {
         getNewSlide($($selectedItem).next());
     });
     $('#js-close-overlay').click(function() {
-        $($overlay).fadeOut(500);
-        $($overlay).empty();
-        $(document).off('keydown');
+        hideOverlay();
     });
 
     //On keypress
@@ -134,9 +149,7 @@ function carouselControl() {
                 break;
 
             case 27: // 'Esc'
-                $($overlay).fadeOut(500);
-                $($overlay).empty();
-                $(document).off('keydown');
+                hideOverlay();
                 break;
 
             default:
@@ -152,11 +165,9 @@ function showOverlay(selectItem) {
     highlightSelected(selectItem);
     getSlideData(selectItem);
     loadCarouselSlide();
-    $($overlay).fadeIn(500);
+    $($overlay).fadeIn(doubleTransition);
     carouselControl();
 }
-
-
 
 
 /* --------------------------------------------------------------------------- *\
@@ -177,10 +188,10 @@ $($input).keyup(function() {
         //Check if the image name contains the input value
         if ($imageName.toLowerCase().indexOf($inputValue.toLowerCase()) < 0) {
             //Hide mismatches
-            $(this).parent().parent().fadeOut(500);
+            $(this).parent().parent().fadeOut(doubleTransition);
         } else {
             //Show matches
-            $(this).parent().parent().fadeIn(500);
+            $(this).parent().parent().fadeIn(doubleTransition);
         }
 
     });
@@ -190,6 +201,18 @@ $($input).keyup(function() {
 /* --------------------------------------------------------------------------- *\
     GALLERY
 \* --------------------------------------------------------------------------- */
+
+//On click of thumbnail
+
+$($galleryItem).click(function(event) {
+
+    //Prevent default interaction   
+    event.preventDefault();
+    injectOverlay();
+    // setTimeout(injectOverlay, 400);
+    showOverlay($(this));
+});
+
 
 //Add alt text to hover + remove again after
 $($galleryItem).mouseover(function() {
@@ -208,19 +231,5 @@ $($galleryItem + ' a').focus(function() {
 $($galleryItem + ' a').blur(function() {
     removeFocusFx();
 });
-
-//Hide overlay 
-$($overlay).hide();
-
-//On click of thumbnail
-
-$($galleryItem).click(function(event) {
-
-    //Prevent default interaction   
-    event.preventDefault();
-    injectOverlay();
-    showOverlay($(this));
-});
-
 
 

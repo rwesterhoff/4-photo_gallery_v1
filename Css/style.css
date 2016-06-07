@@ -66,13 +66,14 @@ li.gallery-item {
   margin: 15px;
   list-style: none;
   /*     &.selected {
-          a {
-              border: 10px solid black;
-          }
-      } */ }
-  li.gallery-item a:focus img, li.gallery-item:hover img {
+      a {
+          border: 10px solid black;
+      }
+  } */ }
+  li.gallery-item img {
     -webkit-transform: scale(1.1);
-            transform: scale(1.1);
+            transform: scale(1.1); }
+  li.gallery-item a:focus img, li.gallery-item:hover img {
     -webkit-filter: blur(10px);
             filter: blur(10px); }
   li.gallery-item a {
@@ -244,11 +245,12 @@ main.container {
 /* Centerring the hover + focus text */
 .js-alt-active {
   position: absolute;
-  z-index: 1000;
+  z-index: 750;
   top: 50%;
   left: 50%;
   display: block;
   margin-right: -50%;
   -webkit-transform: translate(-50%, -100%);
           transform: translate(-50%, -100%);
+  text-align: center;
   color: white; }
