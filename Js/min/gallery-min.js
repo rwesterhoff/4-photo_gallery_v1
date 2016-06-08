@@ -12,6 +12,8 @@ var $selectedItem = '.selected';
 var $classSelected = 'selected';
 var $galleryItem = '.gallery-item';
 var $gallery = '#image-gallery';
+var $currentItem;
+var $totalItems = ($('li').size()) - 1;
 var $hoverTile;
 
 
@@ -115,6 +117,22 @@ function getNewSlide(selectItem) {
     setTimeout(loadCarouselSlide, $singleDuration);
 }
 
+function getPrevSlide() {
+    if ($currentItem > 0) {
+        $currentItem -= 1;
+        alert($currentItem);
+        getNewSlide($($selectedItem).prev());
+    }
+}
+
+function getNextSlide() {
+    if ($currentItem < $totalItems) {
+        $currentItem += 1;
+        alert($currentItem);
+        getNewSlide($($selectedItem).next());
+    }
+}
+
 //Hiding the overlay
 function hideOverlay() {
     $($overlay).fadeOut($doubleDuration);
@@ -127,10 +145,10 @@ function carouselControl() {
 
     //On click left + right arrows
     $('#previous-slide').click(function() {
-        getNewSlide($($selectedItem).prev());
+        getPrevSlide();
     });
     $('#next-slide').click(function() {
-        getNewSlide($($selectedItem).next());
+        getNextSlide();
     });
     $('#js-close-overlay').click(function() {
         hideOverlay();
@@ -138,14 +156,13 @@ function carouselControl() {
 
     //On keypress
     $(document).on('keydown', function(event) {
-
         switch (event.which) {
             case 37: // Left arrow
-                getNewSlide($($selectedItem).prev());
+                getPrevSlide();
                 break;
 
             case 39: // Right arrow
-                getNewSlide($($selectedItem).next());
+                getNextSlide();
                 break;
 
             case 27: // 'Esc'
@@ -205,11 +222,12 @@ $($input).keyup(function() {
 //On click of thumbnail
 
 $($galleryItem).click(function(event) {
+    $currentItem = $($(this)).index();
+    alert($currentItem);
 
     //Prevent default interaction   
     event.preventDefault();
     injectOverlay();
-    // setTimeout(injectOverlay, 400);
     showOverlay($(this));
 });
 
@@ -218,7 +236,6 @@ $($galleryItem).click(function(event) {
 $($galleryItem).mouseover(function() {
     $hoverTile = '<p class="js-alt-active">' + $(this).find('img').attr('alt') + '</p>';
     $(this).prepend($hoverTile);
-    // $(this).siblings().fade(0.5);
 });
 $($galleryItem).mouseout(function() {
     removeFocusFx();
