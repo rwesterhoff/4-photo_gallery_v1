@@ -39,8 +39,8 @@ var $nextButtonHtml = '<button id="next-slide" class="carousel-control right-con
 
 
 //Transitions
-var $singleTransition = 200;
-var $doubleTransition = 400;
+var $singleDuration = 200;
+var $doubleDuration = 400;
 
 /* --------------------------------------------------------------------------- *\
     FUNCTONS
@@ -104,7 +104,7 @@ function loadCarouselSlide() {
 
 //Animate slide
 function animateSlide() {
-    $($currentSlide).fadeOut($singleTransition).fadeIn($singleTransition);
+    $($currentSlide).fadeOut($singleDuration).fadeIn($singleDuration);
 }
 
 //Get new data en load slide
@@ -112,13 +112,13 @@ function getNewSlide(selectItem) {
     highlightSelected(selectItem);
     getSlideData(selectItem);
     animateSlide();
-    setTimeout(loadCarouselSlide, $singleTransition);
+    setTimeout(loadCarouselSlide, $singleDuration);
 }
 
 //Hiding the overlay
 function hideOverlay() {
-    $($overlay).fadeOut($doubleTransition);
-    setTimeout(removeOverlay, $doubleTransition);
+    $($overlay).fadeOut($doubleDuration);
+    setTimeout(removeOverlay, $doubleDuration);
     $(document).off('keydown');
 }
 
@@ -165,7 +165,7 @@ function showOverlay(selectItem) {
     highlightSelected(selectItem);
     getSlideData(selectItem);
     loadCarouselSlide();
-    $($overlay).fadeIn($doubleTransition);
+    $($overlay).fadeIn($doubleDuration);
     carouselControl();
 }
 
@@ -188,10 +188,10 @@ $($input).keyup(function() {
         //Check if the image name contains the input value
         if ($imageName.toLowerCase().indexOf($inputValue.toLowerCase()) < 0) {
             //Hide mismatches
-            $(this).parent().parent().fadeOut($doubleTransition);
+            $(this).parent().parent().fadeOut($doubleDuration);
         } else {
             //Show matches
-            $(this).parent().parent().fadeIn($doubleTransition);
+            $(this).parent().parent().fadeIn($doubleDuration);
         }
 
     });
@@ -218,6 +218,7 @@ $($galleryItem).click(function(event) {
 $($galleryItem).mouseover(function() {
     $hoverTile = '<p class="js-alt-active">' + $(this).find('img').attr('alt') + '</p>';
     $(this).prepend($hoverTile);
+    // $(this).siblings().fade(0.5);
 });
 $($galleryItem).mouseout(function() {
     removeFocusFx();
