@@ -12,8 +12,12 @@ var $selectedItem = '.selected';
 var $classSelected = 'selected';
 var $galleryItem = '.gallery-item';
 var $gallery = '#image-gallery';
-var $currentItem;
-var $totalItems = ($('li').size()) - 1;
+var $totalItems = $('li').size();
+var $currentItemIndex;
+var $prevItemIndex;
+var $nextItemIndex;
+var $firstItemIndex = 0;
+var $lastItemIndex = $totalItems - 1;
 var $hoverTile;
 
 
@@ -27,7 +31,7 @@ var $carousel = '#js-carousel';
 var $slidesWrapper = "#js-carousel-slides";
 var $currentSlide = '.current-slide';
 
-//Injected HTML
+//Injected HTML (for building a fresh overlay each time an item is clicked)
 var $overlayHtml = '<div id="js-image-overlay"></div>';
 var $closeHtml = '<button id="js-close-overlay" class="close-overlay">Close overlay</button>';
 var $carouselHtml = '<div id="js-carousel" class="carousel"></div>';
@@ -39,6 +43,10 @@ var $captionHtml = '<figcaption></figcaption>';
 var $prevButtonHtml = '<button id="previous-slide" class="carousel-control left-control">Previous</button>';
 var $nextButtonHtml = '<button id="next-slide" class="carousel-control right-control">Next</button>';
 
+//Controls
+var $prevButton = '#previous-slide';
+var $nextButton = '#next-slide';
+var $closeButton = '#js-close-overlay';
 
 //Transitions
 var $singleDuration = 200;
@@ -82,25 +90,40 @@ function getSlideData(selectItem) {
     $activeCaption = selectItem.find('img').attr('title');
 }
 
+function showArrows() {
+    $($prevButton).show();
+    $($nextButton).show();
+}
+
+function hidePrevArrow() {
+    $($prevButton).hide();
+}
+
+function hideNextArrow() {
+    $($nextButton).hide();
+}
+
 //Load data in slide (setting stuff)
 function loadCarouselSlide() {
+    //Empty and load fresh data
     $($currentSlide).empty();
-    //If it starts with 'https://youtu.be/'
     if ($activeLink.startsWith('https://youtube.com/')) {
-        //Append an iframe tag
         $($currentSlide).append($iframeHtml);
-        $($currentSlide).append($captionHtml);
-        //And give new data
         $($currentSlide).find('iframe').attr('src', $activeLink);
-        $($currentSlide).find('figcaption').text($activeCaption);
-
     } else {
-        //Else append an img tag
         $($currentSlide).append($imageHtml);
-        $($currentSlide).append($captionHtml);
-        //And give new data
         $($currentSlide).find('img').attr('src', $activeLink);
-        $($currentSlide).find('figcaption').text($activeCaption);
+    }
+    $($currentSlide).append($captionHtml);
+    $($currentSlide).find('figcaption').text($activeCaption);
+
+    //Check the items index
+    if ($currentItemIndex === $firstItemIndex) {
+        hidePrevArrow();
+    } else if ($currentItemIndex === $lastItemIndex) {
+        hideNextArrow();
+    } else {
+        showArrows();
     }
 }
 
@@ -109,48 +132,67 @@ function animateSlide() {
     $($currentSlide).fadeOut($singleDuration).fadeIn($singleDuration);
 }
 
+//Check the index (and log it for testing and debugging)
+function checkIndex() {
+    $prevItemIndex = $currentItemIndex - 1;
+    $nextItemIndex = $currentItemIndex + 1;
+    // console.log('currentItemIndex: ' + $currentItemIndex);
+    // console.log('prevItemIndex: ' + $prevItemIndex);
+    // console.log('nextItemIndex: ' + $nextItemIndex);
+    // console.log('firstItemIndex: ' + $firstItemIndex);
+    // console.log('lastItemIndex: ' + $lastItemIndex);
+}
+
 //Get new data en load slide
 function getNewSlide(selectItem) {
     highlightSelected(selectItem);
     getSlideData(selectItem);
     animateSlide();
     setTimeout(loadCarouselSlide, $singleDuration);
+    checkIndex();
 }
 
 function getPrevSlide() {
-    if ($currentItem > 0) {
-        $currentItem -= 1;
-        alert($currentItem);
+    if ($currentItemIndex > $firstItemIndex) {
+        showArrows();
+        $currentItemIndex -= 1;
         getNewSlide($($selectedItem).prev());
+    }
+    if ($currentItemIndex === $firstItemIndex) {
+        hidePrevArrow();
     }
 }
 
 function getNextSlide() {
-    if ($currentItem < $totalItems) {
-        $currentItem += 1;
-        alert($currentItem);
+    if ($currentItemIndex < $lastItemIndex) {
+        showArrows();
+        $currentItemIndex += 1;
         getNewSlide($($selectedItem).next());
+    }
+    if ($currentItemIndex === $lastItemIndex) {
+        hideNextArrow();
     }
 }
 
-//Hiding the overlay
-function hideOverlay() {
-    $($overlay).fadeOut($doubleDuration);
-    setTimeout(removeOverlay, $doubleDuration);
-    $(document).off('keydown');
-}
 
 //Control the entire thing
 function carouselControl() {
 
+    //Hiding the overlay
+    function hideOverlay() {
+        $($overlay).fadeOut($doubleDuration);
+        setTimeout(removeOverlay, $doubleDuration);
+        $(document).off('keydown');
+    }
+
     //On click left + right arrows
-    $('#previous-slide').click(function() {
+    $($prevButton).click(function() {
         getPrevSlide();
     });
-    $('#next-slide').click(function() {
+    $($nextButton).click(function() {
         getNextSlide();
     });
-    $('#js-close-overlay').click(function() {
+    $($closeButton).click(function() {
         hideOverlay();
     });
 
@@ -190,6 +232,7 @@ function showOverlay(selectItem) {
 /* --------------------------------------------------------------------------- *\
     SEARCH
 \* --------------------------------------------------------------------------- */
+
 //If anything is enterred in the search field
 $($input).keyup(function() {
 
@@ -220,15 +263,16 @@ $($input).keyup(function() {
 \* --------------------------------------------------------------------------- */
 
 //On click of thumbnail
-
 $($galleryItem).click(function(event) {
-    $currentItem = $($(this)).index();
-    alert($currentItem);
+    //Define index of clicked item
+    $currentItemIndex = $($(this)).index();
+    // alert($currentItemIndex);
 
     //Prevent default interaction   
     event.preventDefault();
     injectOverlay();
     showOverlay($(this));
+    checkIndex();
 });
 
 
