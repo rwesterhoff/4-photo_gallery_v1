@@ -37,7 +37,7 @@
 		"outputAbbreviatedPath": "\/Js\/min\/gallery-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
+		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
 	"\/Js\/min\/gallery-min.js": {
