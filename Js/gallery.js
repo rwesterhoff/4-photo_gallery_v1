@@ -289,7 +289,7 @@ $($galleryItem).click(function(event) {
 //Add alt text to hover + remove again after
 $($galleryItem).mouseover(function() {
     $hoverTile = '<p class="js-alt-active">' + $(this).find('img').attr('alt') + '</p>';
-    $(this).prepend($hoverTile);
+    $(this).find('a').prepend($hoverTile);
 });
 
 $($galleryItem).mouseout(function() {
@@ -298,7 +298,7 @@ $($galleryItem).mouseout(function() {
 
 $($galleryItem + ' a').focus(function() {
     $hoverTile = '<p class="js-alt-active">' + $(this).find('img').attr('alt') + '</p>';
-    $(this).prepend($hoverTile);
+    $(this).find('a').prepend($hoverTile);
 });
 
 $($galleryItem + ' a').blur(function() {
