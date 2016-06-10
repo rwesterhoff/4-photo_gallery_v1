@@ -298,7 +298,7 @@ $($galleryItem).mouseout(function() {
 
 $($galleryItem + ' a').focus(function() {
     $hoverTile = '<p class="js-alt-active">' + $(this).find('img').attr('alt') + '</p>';
-    $(this).find('a').prepend($hoverTile);
+    $(this).prepend($hoverTile);
 });
 
 $($galleryItem + ' a').blur(function() {
