@@ -2,3 +2,5 @@
 *.scss
 
 *.scssc
+config.codekit3
+.gitignore
